@@ -46,8 +46,12 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img 
+                  src="/lovable-uploads/b75a91d7-8353-4123-80aa-bb9180fc75f3.png" 
+                  alt="Government College of Technology Logo" 
+                  className="w-12 h-12 object-contain"
+                />
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">GCT Placement Portal</h1>
@@ -144,8 +148,12 @@ const Index = () => {
       <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center space-x-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-              <GraduationCap className="w-6 h-6 text-white" />
+            <div className="w-12 h-12 flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/b75a91d7-8353-4123-80aa-bb9180fc75f3.png" 
+                alt="Government College of Technology Logo" 
+                className="w-12 h-12 object-contain filter brightness-0 invert"
+              />
             </div>
             <h3 className="text-xl font-bold">GCT Placement Portal</h3>
           </div>
