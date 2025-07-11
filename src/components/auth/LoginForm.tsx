@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Eye, EyeOff, GraduationCap } from 'lucide-react';
+import { Eye, EyeOff, GraduationCap, Loader2 } from 'lucide-react';
 
 const userRoles = [
   { value: 'student', label: 'Student', description: 'Access placement resources and track applications' },
@@ -22,11 +23,41 @@ export const LoginForm = () => {
   const [selectedRole, setSelectedRole] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<{ email?: string; password?: string; role?: string }>({});
+  
+  const { login, isLoading } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const validateForm = () => {
+    const newErrors: { email?: string; password?: string; role?: string } = {};
+    
+    if (!email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Please enter a valid email';
+    }
+    
+    if (!password) {
+      newErrors.password = 'Password is required';
+    } else if (password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    
+    if (!selectedRole) {
+      newErrors.role = 'Please select your role';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement authentication logic with Supabase
-    console.log('Login attempt:', { email, role: selectedRole });
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    await login(email, password, selectedRole);
   };
 
   return (
@@ -51,7 +82,7 @@ export const LoginForm = () => {
                 Select Your Role
               </Label>
               <Select value={selectedRole} onValueChange={setSelectedRole}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className={`w-full ${errors.role ? 'border-red-500' : ''}`}>
                   <SelectValue placeholder="Choose your role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -65,6 +96,7 @@ export const LoginForm = () => {
                   ))}
                 </SelectContent>
               </Select>
+              {errors.role && <p className="text-xs text-red-500">{errors.role}</p>}
             </div>
 
             <div className="space-y-2">
@@ -77,9 +109,9 @@ export const LoginForm = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="w-full"
-                required
+                className={`w-full ${errors.email ? 'border-red-500' : ''}`}
               />
+              {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
             </div>
 
             <div className="space-y-2">
@@ -93,8 +125,7 @@ export const LoginForm = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full pr-10"
-                  required
+                  className={`w-full pr-10 ${errors.password ? 'border-red-500' : ''}`}
                 />
                 <button
                   type="button"
@@ -104,14 +135,22 @@ export const LoginForm = () => {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
             </div>
 
             <Button 
               type="submit" 
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-2.5"
-              disabled={!selectedRole || !email || !password}
+              disabled={isLoading}
             >
-              Sign In
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Signing In...
+                </>
+              ) : (
+                'Sign In'
+              )}
             </Button>
           </form>
 

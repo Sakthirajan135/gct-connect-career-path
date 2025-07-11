@@ -1,12 +1,14 @@
 
 import React from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Calendar, Briefcase, TrendingUp } from 'lucide-react';
 
 const Dashboard = () => {
-  // In a real app, this would come from authentication context
-  const userRole = 'student'; // This would be dynamic based on logged-in user
+  const { user } = useAuth();
+
+  if (!user) return null;
 
   const stats = [
     { title: 'Total Applications', value: '12', change: '+2 this week', icon: Briefcase },
@@ -15,12 +17,27 @@ const Dashboard = () => {
     { title: 'Success Rate', value: '67%', change: '+5% improvement', icon: TrendingUp },
   ];
 
+  const getRoleDisplayName = (role: string) => {
+    const roleMap: Record<string, string> = {
+      student: 'Student',
+      placement_officer: 'Placement Officer',
+      recruiter: 'Recruiter / HR',
+      placement_rep: 'Placement Representative',
+      alumni: 'Alumni / Senior',
+      department_staff: 'Department Staff / HoD',
+      admin: 'Admin / Developer'
+    };
+    return roleMap[role] || role;
+  };
+
   return (
-    <DashboardLayout userRole={userRole}>
+    <DashboardLayout userRole={user.role}>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-600 mt-2">Welcome back! Here's your placement overview.</p>
+          <p className="text-gray-600 mt-2">
+            Welcome back, {user.name}! Here's your placement overview as {getRoleDisplayName(user.role)}.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

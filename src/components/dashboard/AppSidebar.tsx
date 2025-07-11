@@ -13,9 +13,12 @@ import {
   Briefcase,
   Upload,
   MessageCircle,
-  Clock
+  Clock,
+  LogOut
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 import {
   Sidebar,
   SidebarContent,
@@ -26,6 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarHeader,
+  SidebarFooter,
 } from '@/components/ui/sidebar';
 
 interface AppSidebarProps {
@@ -89,6 +93,7 @@ const roleMenuItems = {
 };
 
 export const AppSidebar = ({ userRole }: AppSidebarProps) => {
+  const { user, logout } = useAuth();
   const menuItems = roleMenuItems[userRole as keyof typeof roleMenuItems] || [];
 
   return (
@@ -135,6 +140,29 @@ export const AppSidebar = ({ userRole }: AppSidebarProps) => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      {user && (
+        <SidebarFooter className="p-4 border-t border-gray-200">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-600" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 truncate">{user.name}</p>
+              <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            </div>
+          </div>
+          <Button 
+            onClick={logout}
+            variant="outline"
+            size="sm"
+            className="w-full"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
+        </SidebarFooter>
+      )}
     </Sidebar>
   );
 };
