@@ -9,6 +9,12 @@ import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import Applications from "./pages/Applications";
+import Resume from "./pages/Resume";
+import Tests from "./pages/Tests";
+import InterviewPrep from "./pages/InterviewPrep";
+import Calendar from "./pages/Calendar";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,7 +37,54 @@ const App = () => (
                 </ProtectedRoute>
               } 
             />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route 
+              path="/profile" 
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/applications" 
+              element={
+                <ProtectedRoute>
+                  <Applications />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/resume" 
+              element={
+                <ProtectedRoute>
+                  <Resume />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/tests" 
+              element={
+                <ProtectedRoute>
+                  <Tests />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/prep" 
+              element={
+                <ProtectedRoute>
+                  <InterviewPrep />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/calendar" 
+              element={
+                <ProtectedRoute>
+                  <Calendar />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
