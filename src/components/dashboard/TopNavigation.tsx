@@ -24,7 +24,12 @@ import {
 } from 'lucide-react';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 
-export const TopNavigation = () => {
+interface TopNavigationProps {
+  onNotificationClick?: () => void;
+  notificationCount?: number;
+}
+
+export const TopNavigation = ({ onNotificationClick, notificationCount = 0 }: TopNavigationProps) => {
   const { user, logout } = useAuth();
 
   const getRoleDisplayName = (role: string) => {
@@ -69,11 +74,13 @@ export const TopNavigation = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" className="relative">
+          <Button variant="ghost" size="sm" className="relative" onClick={onNotificationClick}>
             <Bell className="h-4 w-4" />
-            <span className="absolute -top-1 -right-1 h-3 w-3 bg-destructive rounded-full text-[10px] text-destructive-foreground flex items-center justify-center">
-              3
-            </span>
+            {notificationCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-3 w-3 bg-destructive rounded-full text-[10px] text-destructive-foreground flex items-center justify-center">
+                {notificationCount}
+              </span>
+            )}
           </Button>
 
           <DropdownMenu>
