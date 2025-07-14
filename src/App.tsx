@@ -11,8 +11,11 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import Applications from "./pages/Applications";
+import Companies from "./pages/Companies";
 import Resume from "./pages/Resume";
 import Tests from "./pages/Tests";
+import Resources from "./pages/Resources";
+import Feedback from "./pages/Feedback";
 import InterviewPrep from "./pages/InterviewPrep";
 import Calendar from "./pages/Calendar";
 import NotFound from "./pages/NotFound";
@@ -54,6 +57,14 @@ const App = () => (
               } 
             />
             <Route 
+              path="/companies" 
+              element={
+                <ProtectedRoute>
+                  <Companies />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/resume" 
               element={
                 <ProtectedRoute>
@@ -66,6 +77,22 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Tests />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/resources" 
+              element={
+                <ProtectedRoute>
+                  <Resources />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/feedback" 
+              element={
+                <ProtectedRoute>
+                  <Feedback />
                 </ProtectedRoute>
               } 
             />

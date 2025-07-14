@@ -2,18 +2,18 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { JobTracker } from '@/components/modules/JobTracker';
+import { Resources as ResourcesModule } from '@/components/modules/Resources';
 
-const Applications = () => {
+const Resources = () => {
   const { user } = useAuth();
 
   if (!user) return null;
 
   return (
     <DashboardLayout userRole={user.role}>
-      <JobTracker />
+      <ResourcesModule />
     </DashboardLayout>
   );
 };
 
-export default Applications;
+export default Resources;

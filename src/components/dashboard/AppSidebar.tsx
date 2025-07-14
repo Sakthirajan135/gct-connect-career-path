@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   User, 
@@ -18,7 +17,8 @@ import {
   Target,
   TrendingUp,
   Shield,
-  Database
+  Database,
+  BookOpen
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -42,11 +42,14 @@ const roleMenuItems = {
   student: [
     { title: 'Dashboard', url: '/dashboard', icon: Home, description: 'Overview & Stats' },
     { title: 'My Profile', url: '/profile', icon: User, description: 'Personal Information' },
-    { title: 'Job Applications', url: '/applications', icon: Briefcase, description: 'Track Applications' },
-    { title: 'Resume Builder', url: '/resume', icon: Upload, description: 'Upload & Manage' },
+    { title: 'Company Browser', url: '/companies', icon: Building, description: 'Explore Opportunities' },
+    { title: 'Job Tracker', url: '/applications', icon: Briefcase, description: 'Track Applications' },
+    { title: 'Resume Manager', url: '/resume', icon: Upload, description: 'Upload & Manage' },
     { title: 'Mock Tests', url: '/tests', icon: FileText, description: 'Practice Tests' },
-    { title: 'Interview Prep', url: '/prep', icon: MessageCircle, description: 'Interview Guide' },
-    { title: 'Placement Calendar', url: '/calendar', icon: Calendar, description: 'Important Dates' },
+    { title: 'Resources', url: '/resources', icon: BookOpen, description: 'Study Materials' },
+    { title: 'Feedback', url: '/feedback', icon: MessageCircle, description: 'Interview Feedback' },
+    { title: 'Interview Prep', url: '/prep', icon: Target, description: 'Interview Guide' },
+    { title: 'Calendar', url: '/calendar', icon: Calendar, description: 'Important Dates' },
   ],
   placement_officer: [
     { title: 'Dashboard', url: '/dashboard', icon: Home, description: 'System Overview' },
