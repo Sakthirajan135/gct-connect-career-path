@@ -2,7 +2,7 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
-import { MockTests } from '@/components/modules/MockTests';
+import { DepartmentTests } from '@/components/modules/DepartmentTests';
 
 const Tests = () => {
   const { user } = useAuth();
@@ -11,7 +11,14 @@ const Tests = () => {
 
   return (
     <DashboardLayout userRole={user.role}>
-      <MockTests />
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Mock Tests & Assessments</h1>
+          <p className="text-muted-foreground">Practice tests categorized by department and skill level</p>
+        </div>
+        
+        <DepartmentTests />
+      </div>
     </DashboardLayout>
   );
 };

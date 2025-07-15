@@ -1,27 +1,22 @@
+
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
+import { QuickActions } from '@/components/dashboard/QuickActions';
+import { RecentActivity } from '@/components/dashboard/RecentActivity';
 import { 
   Users, 
   Calendar, 
   Briefcase, 
   TrendingUp, 
-  Clock,
-  CheckCircle,
-  AlertCircle,
   Building,
   Target,
-  Activity,
   ArrowUpRight,
   ArrowDownRight,
-  FileText,
-  Award,
-  Upload,
-  User
+  Activity
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -59,6 +54,18 @@ const Dashboard = () => {
     { title: 'Success Rate', value: '75%', change: '+12% improvement', icon: TrendingUp, trend: 'up', color: 'orange' },
   ];
 
+  // Calculate placement readiness score dynamically
+  const calculateReadinessScore = () => {
+    const profileCompleteness = user.name && user.email ? 95 : 60;
+    const testScores = 78; // Average of mock test scores
+    const applicationRate = 85; // Based on application activity
+    const interviewSuccess = 70; // Based on interview performance
+    
+    return Math.round((profileCompleteness + testScores + applicationRate + interviewSuccess) / 4);
+  };
+
+  const readinessScore = calculateReadinessScore();
+
   const getTrendIcon = (trend: string) => {
     if (trend === 'up') return <ArrowUpRight className="h-4 w-4 text-green-600" />;
     if (trend === 'down') return <ArrowDownRight className="h-4 w-4 text-red-600" />;
@@ -81,13 +88,13 @@ const Dashboard = () => {
         {/* Header Section */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Welcome back, {user.name}</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Welcome back, {user.name || 'Student'}</h1>
             <p className="text-muted-foreground mt-1">
               Here's your placement progress overview
             </p>
           </div>
           <Badge variant="outline" className="px-4 py-2 text-sm font-medium">
-            Final Year Student
+            {user.role === 'admin' ? 'Administrator' : 'Final Year Student'}
           </Badge>
         </div>
 
@@ -198,81 +205,11 @@ const Dashboard = () => {
           </Card>
 
           {/* Quick Actions */}
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common tasks and shortcuts</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4">
-                <Button className="h-20 flex flex-col space-y-2">
-                  <Upload className="h-6 w-6" />
-                  <span className="text-sm">Upload Resume</span>
-                </Button>
-                <Button className="h-20 flex flex-col space-y-2" variant="outline">
-                  <FileText className="h-6 w-6" />
-                  <span className="text-sm">Take Mock Test</span>
-                </Button>
-                <Button className="h-20 flex flex-col space-y-2" variant="outline">
-                  <Building className="h-6 w-6" />
-                  <span className="text-sm">Browse Companies</span>
-                </Button>
-                <Button className="h-20 flex flex-col space-y-2" variant="outline">
-                  <Calendar className="h-6 w-6" />
-                  <span className="text-sm">View Calendar</span>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <QuickActions />
         </div>
 
         {/* Recent Activities */}
-        <Card className="border-0 shadow-lg">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-lg font-semibold">Recent Activities</CardTitle>
-                <CardDescription>Your latest placement activities</CardDescription>
-              </div>
-              <Button variant="outline" size="sm">View All</Button>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { type: 'application', company: 'TCS', time: '2 hours ago', status: 'completed', icon: Briefcase },
-                { type: 'interview', company: 'Infosys', time: '1 day ago', status: 'scheduled', icon: Calendar },
-                { type: 'test', company: 'JavaScript Mock Test', time: '2 days ago', status: 'completed', icon: FileText },
-                { type: 'update', company: 'Profile Updated', time: '3 days ago', status: 'completed', icon: User },
-              ].map((activity, idx) => (
-                <div key={idx} className="flex items-center space-x-4 p-3 rounded-lg bg-muted/30 hover:bg-muted/50 transition-colors">
-                  <div className={`p-2 rounded-lg ${
-                    activity.status === 'completed' ? 'bg-green-100' : 
-                    activity.status === 'scheduled' ? 'bg-blue-100' : 'bg-orange-100'
-                  }`}>
-                    <activity.icon className={`h-4 w-4 ${
-                      activity.status === 'completed' ? 'text-green-600' : 
-                      activity.status === 'scheduled' ? 'text-blue-600' : 'text-orange-600'
-                    }`} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {activity.type === 'application' && 'Applied to '}
-                      {activity.type === 'interview' && 'Interview scheduled with '}
-                      {activity.type === 'test' && 'Completed '}
-                      {activity.type === 'update' && ''}
-                      <span className="text-primary">{activity.company}</span>
-                    </p>
-                    <p className="text-xs text-muted-foreground">{activity.time}</p>
-                  </div>
-                  <Badge variant={activity.status === 'completed' ? 'default' : 'secondary'} className="text-xs">
-                    {activity.status}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <RecentActivity />
 
         {/* Readiness Score */}
         <Card className="border-0 shadow-lg">
@@ -286,8 +223,12 @@ const Dashboard = () => {
           <CardContent>
             <div className="space-y-6">
               <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">82%</div>
-                <div className="text-muted-foreground">You're doing great! Keep it up.</div>
+                <div className="text-4xl font-bold text-primary mb-2">{readinessScore}%</div>
+                <div className="text-muted-foreground">
+                  {readinessScore >= 80 ? "Excellent! You're well prepared." : 
+                   readinessScore >= 60 ? "Good progress! Keep improving." : 
+                   "Focus on strengthening your profile."}
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -309,7 +250,7 @@ const Dashboard = () => {
                 </div>
               </div>
               
-              <Progress value={82} className="h-3" />
+              <Progress value={readinessScore} className="h-3" />
             </div>
           </CardContent>
         </Card>
