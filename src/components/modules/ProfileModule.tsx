@@ -1,48 +1,42 @@
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { Separator } from '@/components/ui/separator';
 import { 
   User, 
   Mail, 
   Phone, 
   MapPin, 
-  Calendar, 
-  Briefcase, 
-  GraduationCap,
+  Calendar,
   Upload,
-  Camera,
   Save,
-  Edit
+  Camera
 } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 export const ProfileModule = () => {
   const { user } = useAuth();
-  const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  
   const [isEditing, setIsEditing] = useState(false);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
+  
+  const [profileData, setProfileData] = useState({
     name: user?.name || '',
     email: user?.email || '',
-    phone: '',
-    location: '',
-    dateOfBirth: '',
-    department: '',
-    year: '',
-    cgpa: '',
-    skills: '',
-    bio: '',
-    linkedinUrl: '',
-    githubUrl: '',
-    portfolioUrl: ''
+    phone: '+91 9876543210',
+    location: 'Mumbai, Maharashtra',
+    dateOfBirth: '1999-05-15',
+    bio: 'Final year Computer Science student passionate about software development and artificial intelligence.',
+    skills: ['React', 'Node.js', 'Python', 'Machine Learning', 'MongoDB'],
+    education: 'B.Tech Computer Science Engineering',
+    college: 'Indian Institute of Technology',
+    graduation: '2024'
   });
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +46,7 @@ export const ProfileModule = () => {
         toast({
           title: "File too large",
           description: "Please select an image smaller than 5MB.",
-          variant: "destructive",
+          variant: "destructive"
         });
         return;
       }
@@ -61,313 +55,210 @@ export const ProfileModule = () => {
       reader.onload = (e) => {
         setProfileImage(e.target?.result as string);
         toast({
-          title: "Image uploaded",
-          description: "Profile image updated successfully.",
+          title: "Profile image updated",
+          description: "Your profile picture has been updated successfully.",
         });
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
   const handleSave = () => {
-    // Mock save functionality
+    // Here you would typically save to a backend
     setIsEditing(false);
     toast({
       title: "Profile updated",
-      description: "Your profile information has been saved successfully.",
+      description: "Your profile has been saved successfully.",
     });
   };
 
-  const handleCancel = () => {
-    setIsEditing(false);
-    // Reset form data
-    setFormData({
-      name: user?.name || '',
-      email: user?.email || '',
-      phone: '',
-      location: '',
-      dateOfBirth: '',
-      department: '',
-      year: '',
-      cgpa: '',
-      skills: '',
-      bio: '',
-      linkedinUrl: '',
-      githubUrl: '',
-      portfolioUrl: ''
-    });
+  const getInitials = (name: string) => {
+    return name.split(' ').map(n => n[0]).join('').toUpperCase();
   };
 
   return (
     <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+        <p className="text-muted-foreground">Manage your account settings and preferences</p>
+      </div>
+
       {/* Profile Header */}
-      <Card className="border-0 shadow-lg">
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-2xl">My Profile</CardTitle>
-              <CardDescription>Manage your personal information and preferences</CardDescription>
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
+        <CardContent className="pt-6">
+          <div className="flex flex-col md:flex-row items-center md:items-start space-y-4 md:space-y-0 md:space-x-6">
+            <div className="relative">
+              <Avatar className="w-24 h-24">
+                <AvatarImage src={profileImage || undefined} alt="Profile" />
+                <AvatarFallback className="text-lg bg-primary text-primary-foreground">
+                  {getInitials(profileData.name)}
+                </AvatarFallback>
+              </Avatar>
+              <label 
+                htmlFor="profile-upload" 
+                className="absolute bottom-0 right-0 p-1 bg-primary text-primary-foreground rounded-full cursor-pointer hover:bg-primary/90 transition-colors"
+              >
+                <Camera className="h-4 w-4" />
+                <input
+                  id="profile-upload"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+              </label>
             </div>
-            <Button
+            
+            <div className="flex-1 text-center md:text-left">
+              <h2 className="text-2xl font-bold">{profileData.name}</h2>
+              <p className="text-muted-foreground">{profileData.education}</p>
+              <p className="text-sm text-muted-foreground">{profileData.college}</p>
+              <div className="flex flex-wrap justify-center md:justify-start gap-2 mt-3">
+                {profileData.skills.slice(0, 3).map((skill, index) => (
+                  <Badge key={index} variant="secondary">{skill}</Badge>
+                ))}
+                {profileData.skills.length > 3 && (
+                  <Badge variant="outline">+{profileData.skills.length - 3} more</Badge>
+                )}
+              </div>
+            </div>
+            
+            <Button 
               onClick={() => setIsEditing(!isEditing)}
               variant={isEditing ? "outline" : "default"}
             >
-              <Edit className="h-4 w-4 mr-2" />
               {isEditing ? "Cancel" : "Edit Profile"}
             </Button>
           </div>
-        </CardHeader>
-      </Card>
-
-      {/* Profile Image Section */}
-      <Card className="border-0 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Camera className="h-5 w-5" />
-            <span>Profile Picture</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-6">
-            <div className="relative">
-              <div className="w-32 h-32 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center overflow-hidden">
-                {profileImage ? (
-                  <img 
-                    src={profileImage} 
-                    alt="Profile" 
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <User className="w-16 h-16 text-primary-foreground" />
-                )}
-              </div>
-              {isEditing && (
-                <Button
-                  size="sm"
-                  className="absolute bottom-0 right-0 rounded-full w-8 h-8 p-0"
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  <Upload className="h-4 w-4" />
-                </Button>
-              )}
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold">{formData.name || 'Student Name'}</h3>
-              <p className="text-muted-foreground">{formData.department || 'Computer Science Engineering'}</p>
-              <Badge variant="secondary" className="mt-2">
-                {formData.year || 'Final Year'} Student
-              </Badge>
-            </div>
-          </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-          />
         </CardContent>
       </Card>
 
-      {/* Personal Information */}
-      <Card className="border-0 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <User className="h-5 w-5" />
-            <span>Personal Information</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+      {/* Profile Details */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Personal Information */}
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <User className="h-5 w-5" />
+              <span>Personal Information</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
               <Label htmlFor="name">Full Name</Label>
               <Input
                 id="name"
-                value={formData.name}
-                onChange={(e) => handleInputChange('name', e.target.value)}
+                value={profileData.name}
+                onChange={(e) => setProfileData({...profileData, name: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
               />
             </div>
-            <div>
-              <Label htmlFor="email">Email Address</Label>
+            
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
+                value={profileData.email}
+                onChange={(e) => setProfileData({...profileData, email: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
               />
             </div>
-            <div>
-              <Label htmlFor="phone">Phone Number</Label>
+            
+            <div className="space-y-2">
+              <Label htmlFor="phone">Phone</Label>
               <Input
                 id="phone"
-                value={formData.phone}
-                onChange={(e) => handleInputChange('phone', e.target.value)}
+                value={profileData.phone}
+                onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
-                placeholder="+91 98765 43210"
               />
             </div>
-            <div>
+            
+            <div className="space-y-2">
               <Label htmlFor="location">Location</Label>
               <Input
                 id="location"
-                value={formData.location}
-                onChange={(e) => handleInputChange('location', e.target.value)}
+                value={profileData.location}
+                onChange={(e) => setProfileData({...profileData, location: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
-                placeholder="City, State"
               />
             </div>
-            <div>
-              <Label htmlFor="dateOfBirth">Date of Birth</Label>
-              <Input
-                id="dateOfBirth"
-                type="date"
-                value={formData.dateOfBirth}
-                onChange={(e) => handleInputChange('dateOfBirth', e.target.value)}
-                disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      {/* Academic Information */}
-      <Card className="border-0 shadow-lg">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <GraduationCap className="h-5 w-5" />
-            <span>Academic Information</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="department">Department</Label>
+        {/* Academic Information */}
+        <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
+          <CardHeader>
+            <CardTitle>Academic Information</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="education">Degree</Label>
               <Input
-                id="department"
-                value={formData.department}
-                onChange={(e) => handleInputChange('department', e.target.value)}
+                id="education"
+                value={profileData.education}
+                onChange={(e) => setProfileData({...profileData, education: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
-                placeholder="Computer Science Engineering"
               />
             </div>
-            <div>
-              <Label htmlFor="year">Academic Year</Label>
+            
+            <div className="space-y-2">
+              <Label htmlFor="college">College/University</Label>
               <Input
-                id="year"
-                value={formData.year}
-                onChange={(e) => handleInputChange('year', e.target.value)}
+                id="college"
+                value={profileData.college}
+                onChange={(e) => setProfileData({...profileData, college: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
-                placeholder="Final Year"
               />
             </div>
-            <div>
-              <Label htmlFor="cgpa">CGPA</Label>
+            
+            <div className="space-y-2">
+              <Label htmlFor="graduation">Graduation Year</Label>
               <Input
-                id="cgpa"
-                value={formData.cgpa}
-                onChange={(e) => handleInputChange('cgpa', e.target.value)}
+                id="graduation"
+                value={profileData.graduation}
+                onChange={(e) => setProfileData({...profileData, graduation: e.target.value})}
                 disabled={!isEditing}
-                className={!isEditing ? "bg-muted" : ""}
-                placeholder="8.5"
               />
             </div>
-          </div>
-          <div>
-            <Label htmlFor="skills">Technical Skills</Label>
-            <Textarea
-              id="skills"
-              value={formData.skills}
-              onChange={(e) => handleInputChange('skills', e.target.value)}
-              disabled={!isEditing}
-              className={!isEditing ? "bg-muted" : ""}
-              placeholder="JavaScript, React, Node.js, Python, MySQL..."
-              rows={3}
-            />
-          </div>
-          <div>
-            <Label htmlFor="bio">Bio/Summary</Label>
-            <Textarea
-              id="bio"
-              value={formData.bio}
-              onChange={(e) => handleInputChange('bio', e.target.value)}
-              disabled={!isEditing}
-              className={!isEditing ? "bg-muted" : ""}
-              placeholder="Brief description about yourself and career objectives..."
-              rows={4}
-            />
-          </div>
-        </CardContent>
-      </Card>
+            
+            <div className="space-y-2">
+              <Label htmlFor="bio">Bio</Label>
+              <Textarea
+                id="bio"
+                value={profileData.bio}
+                onChange={(e) => setProfileData({...profileData, bio: e.target.value})}
+                disabled={!isEditing}
+                rows={3}
+              />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
 
-      {/* Social Links */}
-      <Card className="border-0 shadow-lg">
+      {/* Skills Section */}
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
         <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Briefcase className="h-5 w-5" />
-            <span>Professional Links</span>
-          </CardTitle>
+          <CardTitle>Skills & Expertise</CardTitle>
+          <CardDescription>Your technical and professional skills</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div>
-            <Label htmlFor="linkedinUrl">LinkedIn Profile</Label>
-            <Input
-              id="linkedinUrl"
-              value={formData.linkedinUrl}
-              onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
-              disabled={!isEditing}
-              className={!isEditing ? "bg-muted" : ""}
-              placeholder="https://linkedin.com/in/yourprofile"
-            />
-          </div>
-          <div>
-            <Label htmlFor="githubUrl">GitHub Profile</Label>
-            <Input
-              id="githubUrl"
-              value={formData.githubUrl}
-              onChange={(e) => handleInputChange('githubUrl', e.target.value)}
-              disabled={!isEditing}
-              className={!isEditing ? "bg-muted" : ""}
-              placeholder="https://github.com/yourusername"
-            />
-          </div>
-          <div>
-            <Label htmlFor="portfolioUrl">Portfolio Website</Label>
-            <Input
-              id="portfolioUrl"
-              value={formData.portfolioUrl}
-              onChange={(e) => handleInputChange('portfolioUrl', e.target.value)}
-              disabled={!isEditing}
-              className={!isEditing ? "bg-muted" : ""}
-              placeholder="https://yourportfolio.com"
-            />
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            {profileData.skills.map((skill, index) => (
+              <Badge key={index} variant="outline" className="px-3 py-1">
+                {skill}
+              </Badge>
+            ))}
           </div>
         </CardContent>
       </Card>
 
       {/* Save Button */}
       {isEditing && (
-        <div className="flex justify-end space-x-4">
-          <Button variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
-          <Button onClick={handleSave}>
-            <Save className="h-4 w-4 mr-2" />
+        <div className="flex justify-end">
+          <Button onClick={handleSave} className="px-8">
+            <Save className="mr-2 h-4 w-4" />
             Save Changes
           </Button>
         </div>

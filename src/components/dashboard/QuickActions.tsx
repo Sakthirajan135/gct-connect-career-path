@@ -1,135 +1,130 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { 
-  Upload, 
   FileText, 
-  Building, 
   Calendar, 
+  Users, 
+  BookOpen, 
+  Upload,
   LogOut,
-  User
+  TestTube,
+  Building
 } from 'lucide-react';
+import { toast } from '@/hooks/use-toast';
 
 export const QuickActions = () => {
-  const { logout } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
-  const handleLogout = async () => {
-    try {
-      await logout();
-      toast({
-        title: "Logged out successfully",
-        description: "You have been logged out of your account.",
-      });
-      navigate('/login');
-    } catch (error) {
-      toast({
-        title: "Logout failed",
-        description: "There was an error logging out. Please try again.",
-        variant: "destructive",
-      });
+  const handleAction = (action: string) => {
+    switch (action) {
+      case 'upload-resume':
+        navigate('/resume');
+        toast({
+          title: "Resume Upload",
+          description: "Redirecting to resume upload page...",
+        });
+        break;
+      case 'schedule-interview':
+        navigate('/calendar');
+        toast({
+          title: "Interview Scheduler",
+          description: "Opening calendar to schedule interviews...",
+        });
+        break;
+      case 'view-companies':
+        navigate('/companies');
+        toast({
+          title: "Company Browser",
+          description: "Loading available companies...",
+        });
+        break;
+      case 'practice-tests':
+        navigate('/tests');
+        toast({
+          title: "Mock Tests",
+          description: "Opening practice test modules...",
+        });
+        break;
+      case 'logout':
+        logout();
+        toast({
+          title: "Logged Out",
+          description: "You have been successfully logged out.",
+        });
+        break;
+      default:
+        toast({
+          title: "Feature Coming Soon",
+          description: "This feature will be available soon!",
+        });
     }
   };
 
-  const handleUploadResume = () => {
-    navigate('/resume');
-    toast({
-      title: "Redirecting to Resume Manager",
-      description: "Upload and manage your resumes here.",
-    });
-  };
-
-  const handleMockTest = () => {
-    navigate('/tests');
-    toast({
-      title: "Redirecting to Mock Tests",
-      description: "Take practice tests to improve your skills.",
-    });
-  };
-
-  const handleBrowseCompanies = () => {
-    navigate('/companies');
-    toast({
-      title: "Redirecting to Companies",
-      description: "Browse available companies and opportunities.",
-    });
-  };
-
-  const handleViewCalendar = () => {
-    navigate('/calendar');
-    toast({
-      title: "Redirecting to Calendar",
-      description: "View your placement schedule and events.",
-    });
-  };
-
-  const handleViewProfile = () => {
-    navigate('/profile');
-    toast({
-      title: "Redirecting to Profile",
-      description: "Update your profile information.",
-    });
-  };
+  const actions = [
+    {
+      icon: Upload,
+      title: "Upload Resume",
+      description: "Upload and analyze your resume",
+      action: "upload-resume",
+      variant: "default" as const
+    },
+    {
+      icon: Calendar,
+      title: "Schedule Interview",
+      description: "Book your next interview slot",
+      action: "schedule-interview",
+      variant: "outline" as const
+    },
+    {
+      icon: Building,
+      title: "Browse Companies",
+      description: "Explore job opportunities",
+      action: "view-companies",
+      variant: "outline" as const
+    },
+    {
+      icon: TestTube,
+      title: "Practice Tests",
+      description: "Take mock tests and assessments",
+      action: "practice-tests",
+      variant: "outline" as const
+    },
+    {
+      icon: LogOut,
+      title: "Logout",
+      description: "Sign out of your account",
+      action: "logout",
+      variant: "destructive" as const
+    }
+  ];
 
   return (
-    <Card className="border-0 shadow-lg">
+    <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
       <CardHeader>
         <CardTitle>Quick Actions</CardTitle>
+        <CardDescription>Frequently used actions and shortcuts</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 gap-4">
-          <Button 
-            className="h-20 flex flex-col space-y-2"
-            onClick={handleUploadResume}
-          >
-            <Upload className="h-6 w-6" />
-            <span className="text-sm">Upload Resume</span>
-          </Button>
-          <Button 
-            className="h-20 flex flex-col space-y-2" 
-            variant="outline"
-            onClick={handleMockTest}
-          >
-            <FileText className="h-6 w-6" />
-            <span className="text-sm">Take Mock Test</span>
-          </Button>
-          <Button 
-            className="h-20 flex flex-col space-y-2" 
-            variant="outline"
-            onClick={handleBrowseCompanies}
-          >
-            <Building className="h-6 w-6" />
-            <span className="text-sm">Browse Companies</span>
-          </Button>
-          <Button 
-            className="h-20 flex flex-col space-y-2" 
-            variant="outline"
-            onClick={handleViewCalendar}
-          >
-            <Calendar className="h-6 w-6" />
-            <span className="text-sm">View Calendar</span>
-          </Button>
-          <Button 
-            className="h-20 flex flex-col space-y-2" 
-            variant="outline"
-            onClick={handleViewProfile}
-          >
-            <User className="h-6 w-6" />
-            <span className="text-sm">My Profile</span>
-          </Button>
-          <Button 
-            className="h-20 flex flex-col space-y-2" 
-            variant="destructive"
-            onClick={handleLogout}
-          >
-            <LogOut className="h-6 w-6" />
-            <span className="text-sm">Logout</span>
-          </Button>
+        <div className="grid grid-cols-1 gap-3">
+          {actions.map((action, index) => (
+            <Button
+              key={index}
+              variant={action.variant}
+              className="justify-start h-auto p-4 text-left"
+              onClick={() => handleAction(action.action)}
+            >
+              <action.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+              <div className="flex flex-col items-start">
+                <span className="font-medium">{action.title}</span>
+                <span className="text-xs opacity-70">{action.description}</span>
+              </div>
+            </Button>
+          ))}
         </div>
       </CardContent>
     </Card>
