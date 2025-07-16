@@ -95,14 +95,14 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 1.7;
     background: linear-gradient(135deg, hsl(210, 20%, 98%) 0%, hsl(190, 30%, 96%) 50%, hsl(162, 15%, 96%) 100%);
     min-height: 100vh;
   }
 
   h1 {
-    @apply text-5xl font-bold tracking-tight;
+    @apply text-6xl font-bold tracking-tight;
     background: linear-gradient(135deg, hsl(215, 25%, 15%) 0%, hsl(162, 76%, 47%) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -110,15 +110,15 @@
   }
 
   h2 {
-    @apply text-4xl font-semibold tracking-tight;
+    @apply text-5xl font-semibold tracking-tight;
   }
 
   h3 {
-    @apply text-3xl font-semibold;
+    @apply text-4xl font-semibold;
   }
 
   h4 {
-    @apply text-2xl font-medium;
+    @apply text-3xl font-medium;
   }
 
   p {
@@ -126,11 +126,11 @@
   }
 
   .text-sm {
-    font-size: 16px;
+    font-size: 18px;
   }
 
   .text-xs {
-    font-size: 14px;
+    font-size: 16px;
   }
 }
 
@@ -163,5 +163,15 @@
 
   .floating-element {
     @apply transform transition-all duration-500 hover:scale-105 hover:-translate-y-2;
+  }
+
+  .modern-input {
+    @apply border-0 bg-muted/50 backdrop-blur-sm rounded-2xl px-6 py-4 text-lg;
+    @apply focus:bg-background focus:ring-2 focus:ring-primary/30 transition-all duration-300;
+  }
+
+  .modern-select {
+    @apply border-0 bg-muted/50 backdrop-blur-sm rounded-2xl px-6 py-4 text-lg;
+    @apply focus:bg-background focus:ring-2 focus:ring-primary/30 transition-all duration-300;
   }
 }

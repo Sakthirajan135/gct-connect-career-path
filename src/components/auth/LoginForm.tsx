@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Eye, EyeOff, GraduationCap, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, GraduationCap, Loader2, Sparkles } from 'lucide-react';
 
 const userRoles = [
   { value: 'student', label: 'Student', description: 'Access placement resources and track applications' },
@@ -61,46 +61,56 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-md shadow-2xl border-0">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center">
-            <GraduationCap className="w-8 h-8 text-white" />
+    <div className="min-h-screen flex items-center justify-center gradient-bg p-6 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-20 left-20 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-20 right-20 w-80 h-80 bg-accent/10 rounded-full blur-3xl"></div>
+      
+      <Card className="w-full max-w-lg glass-card border-0 shadow-2xl relative z-10">
+        <CardHeader className="text-center space-y-6 pb-8">
+          <div className="mx-auto w-20 h-20 bg-gradient-to-br from-primary/20 to-accent/20 rounded-3xl flex items-center justify-center">
+            <GraduationCap className="w-10 h-10 text-primary" />
           </div>
-          <div>
-            <CardTitle className="text-2xl font-bold text-gray-900">GCT Placement Portal</CardTitle>
-            <CardDescription className="text-gray-600 mt-2">
+          <div className="space-y-3">
+            <div className="flex items-center justify-center gap-3">
+              <Sparkles className="h-6 w-6 text-primary" />
+              <span className="text-xl font-semibold text-primary">Welcome Back</span>
+            </div>
+            <CardTitle className="text-4xl font-bold text-gradient">
+              GCT Placement Portal
+            </CardTitle>
+            <CardDescription className="text-xl text-muted-foreground font-medium">
               Sign in to access your placement dashboard
             </CardDescription>
           </div>
         </CardHeader>
         
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="role" className="text-sm font-medium text-gray-700">
+        <CardContent className="space-y-8 px-8 pb-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-3">
+              <Label htmlFor="role" className="text-lg font-semibold text-foreground">
                 Select Your Role
               </Label>
               <Select value={selectedRole} onValueChange={setSelectedRole}>
-                <SelectTrigger className={`w-full ${errors.role ? 'border-red-500' : ''}`}>
+                <SelectTrigger className={`modern-select ${errors.role ? 'ring-2 ring-destructive' : ''}`}>
                   <SelectValue placeholder="Choose your role" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="glass-card border-0 shadow-2xl">
                   {userRoles.map((role) => (
-                    <SelectItem key={role.value} value={role.value}>
+                    <SelectItem key={role.value} value={role.value} className="py-4">
                       <div className="flex flex-col items-start">
-                        <span className="font-medium">{role.label}</span>
-                        <span className="text-xs text-gray-500">{role.description}</span>
+                        <span className="font-semibold text-lg">{role.label}</span>
+                        <span className="text-sm text-muted-foreground">{role.description}</span>
                       </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              {errors.role && <p className="text-xs text-red-500">{errors.role}</p>}
+              {errors.role && <p className="text-sm text-destructive font-medium">{errors.role}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+            <div className="space-y-3">
+              <Label htmlFor="email" className="text-lg font-semibold text-foreground">
                 Email Address
               </Label>
               <Input
@@ -109,13 +119,13 @@ export const LoginForm = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className={`w-full ${errors.email ? 'border-red-500' : ''}`}
+                className={`modern-input ${errors.email ? 'ring-2 ring-destructive' : ''}`}
               />
-              {errors.email && <p className="text-xs text-red-500">{errors.email}</p>}
+              {errors.email && <p className="text-sm text-destructive font-medium">{errors.email}</p>}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+            <div className="space-y-3">
+              <Label htmlFor="password" className="text-lg font-semibold text-foreground">
                 Password
               </Label>
               <div className="relative">
@@ -125,48 +135,51 @@ export const LoginForm = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className={`w-full pr-10 ${errors.password ? 'border-red-500' : ''}`}
+                  className={`modern-input pr-14 ${errors.password ? 'ring-2 ring-destructive' : ''}`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.password && <p className="text-xs text-red-500">{errors.password}</p>}
+              {errors.password && <p className="text-sm text-destructive font-medium">{errors.password}</p>}
             </div>
 
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-2.5"
+              className="w-full modern-button text-xl py-6 mt-8"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  <Loader2 className="w-5 h-5 mr-3 animate-spin" />
                   Signing In...
                 </>
               ) : (
-                'Sign In'
+                <>
+                  <Sparkles className="w-5 h-5 mr-3" />
+                  Sign In
+                </>
               )}
             </Button>
           </form>
 
-          <div className="text-center">
-            <a href="#" className="text-sm text-blue-600 hover:text-blue-800 hover:underline">
+          <div className="text-center space-y-6">
+            <a href="#" className="text-lg text-primary hover:text-primary/80 hover:underline font-medium transition-colors">
               Forgot your password?
             </a>
-          </div>
 
-          <div className="text-center pt-4 border-t">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
-              <a href="#" className="text-blue-600 hover:text-blue-800 font-medium hover:underline">
-                Contact Admin
-              </a>
-            </p>
+            <div className="pt-6 border-t border-border/50">
+              <p className="text-lg text-muted-foreground">
+                Don't have an account?{' '}
+                <a href="#" className="text-primary hover:text-primary/80 font-semibold hover:underline transition-colors">
+                  Contact Admin
+                </a>
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
