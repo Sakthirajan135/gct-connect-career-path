@@ -71,57 +71,69 @@ export const QuickActions = () => {
       title: "Upload Resume",
       description: "Upload and analyze your resume",
       action: "upload-resume",
-      variant: "default" as const
+      variant: "default" as const,
+      bgColor: "bg-blue-50 hover:bg-blue-100",
+      iconColor: "text-blue-600"
     },
     {
       icon: Calendar,
       title: "Schedule Interview",
       description: "Book your next interview slot",
       action: "schedule-interview",
-      variant: "outline" as const
+      variant: "outline" as const,
+      bgColor: "bg-emerald-50 hover:bg-emerald-100",
+      iconColor: "text-emerald-600"
     },
     {
       icon: Building,
       title: "Browse Companies",
       description: "Explore job opportunities",
       action: "view-companies",
-      variant: "outline" as const
+      variant: "outline" as const,
+      bgColor: "bg-purple-50 hover:bg-purple-100",
+      iconColor: "text-purple-600"
     },
     {
       icon: TestTube,
       title: "Practice Tests",
       description: "Take mock tests and assessments",
       action: "practice-tests",
-      variant: "outline" as const
+      variant: "outline" as const,
+      bgColor: "bg-amber-50 hover:bg-amber-100",
+      iconColor: "text-amber-600"
     },
     {
       icon: LogOut,
       title: "Logout",
       description: "Sign out of your account",
       action: "logout",
-      variant: "destructive" as const
+      variant: "destructive" as const,
+      bgColor: "bg-red-50 hover:bg-red-100",
+      iconColor: "text-red-600"
     }
   ];
 
   return (
-    <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
-      <CardHeader>
-        <CardTitle>Quick Actions</CardTitle>
-        <CardDescription>Frequently used actions and shortcuts</CardDescription>
+    <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+      <CardHeader className="pb-6">
+        <CardTitle className="text-xl font-semibold">Quick Actions</CardTitle>
+        <CardDescription className="text-base">Frequently used actions and shortcuts</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-4">
           {actions.map((action, index) => (
             <Button
               key={index}
               variant={action.variant}
-              className="justify-start h-auto p-4 text-left"
+              className={`justify-start h-auto p-5 text-left group transition-all duration-200 ${action.bgColor}`}
               onClick={() => handleAction(action.action)}
             >
-              <action.icon className="mr-3 h-5 w-5 flex-shrink-0" />
+              <div className={`p-2 rounded-lg mr-4 ${action.bgColor} group-hover:scale-110 transition-transform duration-200`}>
+                <action.icon className={`h-5 w-5 ${action.iconColor}`} />
+              </div>
               <div className="flex flex-col items-start">
-                <span className="font-medium">{action.title}</span>
-                <span className="text-xs opacity-70">{action.description}</span>
+                <span className="font-semibold text-base">{action.title}</span>
+                <span className="text-sm opacity-70">{action.description}</span>
               </div>
             </Button>
           ))}

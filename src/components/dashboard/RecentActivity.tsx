@@ -20,7 +20,9 @@ export const RecentActivity = () => {
       description: 'Software Engineer - Full Stack',
       timestamp: '2 hours ago',
       status: 'pending',
-      icon: FileText
+      icon: FileText,
+      bgColor: 'bg-blue-50',
+      iconColor: 'text-blue-600'
     },
     {
       id: 2,
@@ -29,7 +31,9 @@ export const RecentActivity = () => {
       description: 'Microsoft - Technical Round',
       timestamp: '1 day ago',
       status: 'scheduled',
-      icon: Calendar
+      icon: Calendar,
+      bgColor: 'bg-emerald-50',
+      iconColor: 'text-emerald-600'
     },
     {
       id: 3,
@@ -38,7 +42,9 @@ export const RecentActivity = () => {
       description: 'Data Structures & Algorithms - Score: 85%',
       timestamp: '2 days ago',
       status: 'completed',
-      icon: CheckCircle
+      icon: CheckCircle,
+      bgColor: 'bg-green-50',
+      iconColor: 'text-green-600'
     },
     {
       id: 4,
@@ -47,7 +53,9 @@ export const RecentActivity = () => {
       description: 'Amazon - Positive feedback on coding round',
       timestamp: '3 days ago',
       status: 'received',
-      icon: MessageSquare
+      icon: MessageSquare,
+      bgColor: 'bg-purple-50',
+      iconColor: 'text-purple-600'
     },
     {
       id: 5,
@@ -56,7 +64,9 @@ export const RecentActivity = () => {
       description: 'Add new project and certifications',
       timestamp: '1 week ago',
       status: 'pending',
-      icon: AlertCircle
+      icon: AlertCircle,
+      bgColor: 'bg-amber-50',
+      iconColor: 'text-amber-600'
     }
   ];
 
@@ -76,31 +86,31 @@ export const RecentActivity = () => {
   };
 
   return (
-    <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
-      <CardHeader>
-        <CardTitle>Recent Activity</CardTitle>
-        <CardDescription>Your latest placement-related activities</CardDescription>
+    <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+      <CardHeader className="pb-6">
+        <CardTitle className="text-xl font-semibold">Recent Activity</CardTitle>
+        <CardDescription className="text-base">Your latest placement-related activities</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-5">
           {activities.map((activity) => (
-            <div key={activity.id} className="flex items-start space-x-3 p-3 rounded-lg hover:bg-muted/50 transition-colors">
-              <div className="p-2 rounded-full bg-primary/10">
-                <activity.icon className="h-4 w-4 text-primary" />
+            <div key={activity.id} className="flex items-start space-x-4 p-4 rounded-xl hover:bg-muted/50 transition-colors group">
+              <div className={`p-3 rounded-xl ${activity.bgColor} group-hover:scale-110 transition-transform duration-200`}>
+                <activity.icon className={`h-5 w-5 ${activity.iconColor}`} />
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 space-y-2">
                 <div className="flex items-center justify-between">
-                  <p className="font-medium text-sm truncate">{activity.title}</p>
+                  <p className="font-semibold text-base truncate">{activity.title}</p>
                   <Badge 
                     variant="outline" 
-                    className={`text-xs ${getStatusColor(activity.status)}`}
+                    className={`text-sm ${getStatusColor(activity.status)}`}
                   >
                     {activity.status}
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground mt-1">{activity.description}</p>
-                <div className="flex items-center mt-2 text-xs text-muted-foreground">
-                  <Clock className="h-3 w-3 mr-1" />
+                <p className="text-sm text-muted-foreground">{activity.description}</p>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <Clock className="h-4 w-4 mr-2" />
                   {activity.timestamp}
                 </div>
               </div>

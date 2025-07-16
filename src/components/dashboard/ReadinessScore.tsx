@@ -27,22 +27,22 @@ export const ReadinessScore = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
       {/* Test Scores */}
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
-        <CardHeader>
-          <CardTitle>Test Performance</CardTitle>
-          <CardDescription>Your latest mock test scores</CardDescription>
+      <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-xl font-semibold">Test Performance</CardTitle>
+          <CardDescription className="text-base">Your latest mock test scores</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-6">
             {testScoreData.map((test, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>{test.name}</span>
-                  <span className="font-medium">{test.score}%</span>
+              <div key={index} className="space-y-3">
+                <div className="flex justify-between text-base">
+                  <span className="font-medium">{test.name}</span>
+                  <span className="font-semibold text-primary">{test.score}%</span>
                 </div>
-                <Progress value={test.score} className="h-2" />
+                <Progress value={test.score} className="h-3" />
               </div>
             ))}
           </div>
@@ -50,45 +50,45 @@ export const ReadinessScore = () => {
       </Card>
 
       {/* Readiness Score */}
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-card to-card/80">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Target className="h-5 w-5" />
+      <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
+        <CardHeader className="pb-6">
+          <CardTitle className="flex items-center space-x-3 text-xl font-semibold">
+            <Target className="h-6 w-6" />
             <span>Placement Readiness Score</span>
           </CardTitle>
-          <CardDescription>Overall assessment of your preparation level</CardDescription>
+          <CardDescription className="text-base">Overall assessment of your preparation level</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            <div className="text-center">
-              <div className="text-4xl font-bold text-primary mb-2">{readinessScore}%</div>
-              <div className="text-muted-foreground">
+          <div className="space-y-8">
+            <div className="text-center space-y-3">
+              <div className="text-5xl font-bold text-primary mb-3">{readinessScore}%</div>
+              <div className="text-base text-muted-foreground font-medium">
                 {readinessScore >= 80 ? "Excellent! You're well prepared." : 
                  readinessScore >= 60 ? "Good progress! Keep improving." : 
                  "Focus on strengthening your profile."}
               </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">95%</div>
-                <div className="text-sm text-muted-foreground">Profile</div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">95%</div>
+                <div className="text-sm text-muted-foreground font-medium">Profile</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">78%</div>
-                <div className="text-sm text-muted-foreground">Tests</div>
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">78%</div>
+                <div className="text-sm text-muted-foreground font-medium">Tests</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">85%</div>
-                <div className="text-sm text-muted-foreground">Applications</div>
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">85%</div>
+                <div className="text-sm text-muted-foreground font-medium">Applications</div>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary">70%</div>
-                <div className="text-sm text-muted-foreground">Interviews</div>
+              <div className="text-center space-y-2">
+                <div className="text-3xl font-bold text-primary">70%</div>
+                <div className="text-sm text-muted-foreground font-medium">Interviews</div>
               </div>
             </div>
             
-            <Progress value={readinessScore} className="h-3" />
+            <Progress value={readinessScore} className="h-4" />
           </div>
         </CardContent>
       </Card>
